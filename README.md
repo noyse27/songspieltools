@@ -21,7 +21,7 @@ Ein digitaler Würfel-Ersatz für Hitster Bingo. Würfelt zufällig:
 - **Kartenfarbe** (Gelb, Grün, Lila, Hellblau, Pink)
 - **Edition** (Original, Summer Hits, Guilty Pleasures, Schlager, …)
 
-Nach dem Würfeln erscheint ein GO!-Kreis mit 35-Sekunden-Countdown für die Ratephase.
+Nach dem Würfeln erscheint ein GO!-Kreis mit 25-Sekunden-Countdown für die Ratephase.
 
 **Host-Modus:** Über den Button oben kann zwischen Würfel-Ansicht und einer eingebetteten Bingokarte umgeschaltet werden – ideal für den Spielleiter.
 
