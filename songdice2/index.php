@@ -179,5 +179,10 @@ $animationData = [
 </script>
 <script src="assets/dice.js"></script>
 <script src="assets/bingo.js"></script>
+
+<footer>
+  &copy; 2016 <a href="https://polze.net" target="_blank">PolzeSoft</a> &nbsp;|&nbsp;
+  Kontakt: <a href="mailto:songspieltools@polze.net">songspieltools@polze.net</a>
+</footer>
 </body>
 </html>
