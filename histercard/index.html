@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hitster Bingo</title>
+<style>
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #2b2b2b;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    color: #fff;
+  }
+
+  h1 {
+    margin: 0 0 16px 0;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+
+  #newCardBtn {
+    margin-bottom: 18px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff5fa2, #7d5cff);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.1s;
+  }
+
+  #newCardBtn:active {
+    transform: scale(0.96);
+  }
+
+  #card {
+    background: #111;
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    width: min(92vw, 420px);
+    aspect-ratio: 1 / 1.2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 4px;
+  }
+
+  .cell {
+    position: relative;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .cell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%);
+  }
+
+  .cell .mark {
+    font-size: clamp(28px, 9vw, 48px);
+    font-weight: 900;
+    color: rgba(0,0,0,0.75);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.12s, transform 0.12s;
+    z-index: 2;
+    font-family: Arial, sans-serif;
+  }
+
+  .cell.marked .mark {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .color-green  { background-color: #6fc36b; }
+  .color-yellow { background-color: #f3d23e; }
+  .color-red    { background-color: #e8538a; }
+  .color-purple { background-color: #9b7fe0; }
+  .color-blue   { background-color: #5fb6ec; }
+
+  #logo {
+    margin-top: 10px;
+    text-align: center;
+    font-size: clamp(20px, 6vw, 32px);
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #ff4fc3;
+    text-shadow: 0 0 6px #ff4fc3, 0 0 14px #ff4fc3;
+    font-family: 'Trebuchet MS', sans-serif;
+  }
+
+  #bingoOverlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    z-index: 50;
+    cursor: pointer;
+  }
+
+  #bingoOverlay.show {
+    display: flex;
+  }
+
+  #bingoText {
+    font-size: clamp(48px, 18vw, 110px);
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: #ffe14f;
+    text-shadow: 0 0 10px #ff4fc3, 0 0 30px #ff4fc3, 0 0 50px #7d5cff;
+    transform: rotate(-8deg);
+    animation: pop 0.4s ease-out;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    70% { transform: scale(1.15) rotate(-8deg); opacity: 1; }
+    100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+  }
+
+  #confirmOverlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+  }
+
+  #confirmOverlay.show {
+    display: flex;
+  }
+
+  #confirmModal {
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: min(85vw, 340px);
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    border: 2px solid #7d5cff;
+  }
+
+  #confirmModal h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: #ffe14f;
+    text-shadow: 0 0 8px #ff4fc3;
+    letter-spacing: 3px;
+  }
+
+  #confirmModal p {
+    margin: 0 0 22px 0;
+    font-size: 1rem;
+    color: #ddd;
+  }
+
+  #confirmButtons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  #confirmButtons button {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  #confirmYes {
+    background: linear-gradient(135deg, #ff5fa2, #7d5cff);
+  }
+
+  #confirmNo {
+    background: #444;
+  }
+</style>
+</head>
+<body>
+
+<h1>HITSTER BINGO</h1>
+<button id="newCardBtn">Neue BingoCard erzeugen</button>
+
+<div id="card">
+  <div id="grid"></div>
+  <div id="logo">HITSTER</div>
+</div>
+
+<div id="bingoOverlay">
+  <div id="bingoText">BINGO!</div>
+</div>
+
+<div id="confirmOverlay">
+  <div id="confirmModal">
+    <h2>BINGO!</h2>
+    <p>Neue Karte erzeugen?</p>
+    <div id="confirmButtons">
+      <button id="confirmNo">Abbrechen</button>
+      <button id="confirmYes">Ja</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const COLORS = ['green', 'yellow', 'red', 'purple', 'blue'];
+  const grid = document.getElementById('grid');
+  const newCardBtn = document.getElementById('newCardBtn');
+  const bingoOverlay = document.getElementById('bingoOverlay');
+  const confirmOverlay = document.getElementById('confirmOverlay');
+  const confirmYes = document.getElementById('confirmYes');
+  const confirmNo = document.getElementById('confirmNo');
+
+  let marked = new Array(25).fill(false);
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function generateColors() {
+    let colors = [];
+    COLORS.forEach(c => {
+      for (let i = 0; i < 5; i++) colors.push(c);
+    });
+    return shuffle(colors);
+  }
+
+  function buildCard() {
+    marked = new Array(25).fill(false);
+    bingoOverlay.classList.remove('show');
+    grid.innerHTML = '';
+    const colors = generateColors();
+
+    colors.forEach((color, index) => {
+      const cell = document.createElement('div');
+      cell.className = `cell color-${color}`;
+      cell.dataset.index = index;
+
+      const mark = document.createElement('span');
+      mark.className = 'mark';
+      mark.textContent = '✕';
+      cell.appendChild(mark);
+
+      cell.addEventListener('click', () => toggleCell(index, cell));
+      grid.appendChild(cell);
+    });
+  }
+
+  function toggleCell(index, cell) {
+    marked[index] = !marked[index];
+    cell.classList.toggle('marked', marked[index]);
+    checkBingo();
+  }
+
+  function checkBingo() {
+    const lines = [];
+
+    // rows
+    for (let r = 0; r < 5; r++) {
+      lines.push([0,1,2,3,4].map(c => r * 5 + c));
+    }
+    // columns
+    for (let c = 0; c < 5; c++) {
+      lines.push([0,1,2,3,4].map(r => r * 5 + c));
+    }
+    // diagonals
+    lines.push([0,6,12,18,24]);
+    lines.push([4,8,12,16,20]);
+
+    const hasBingo = lines.some(line => line.every(i => marked[i]));
+
+    if (hasBingo) {
+      bingoOverlay.classList.add('show');
+    } else {
+      bingoOverlay.classList.remove('show');
+    }
+  }
+
+  let wakeLock = null;
+
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => {
+          wakeLock = null;
+        });
+      }
+    } catch (err) {
+      // wake lock not available or denied - ignore
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && wakeLock === null) {
+      requestWakeLock();
+    }
+  });
+
+  requestWakeLock();
+
+  newCardBtn.addEventListener('click', buildCard);
+
+  bingoOverlay.addEventListener('click', () => {
+    confirmOverlay.classList.add('show');
+  });
+
+  confirmYes.addEventListener('click', () => {
+    confirmOverlay.classList.remove('show');
+    buildCard();
+  });
+
+  confirmNo.addEventListener('click', () => {
+    confirmOverlay.classList.remove('show');
+  });
+
+  buildCard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+:root {
+    /* Grundfarben */
+    --color-bg: #2b2b2b;
+    --color-bg-panel: #1e1e1e;
+    --color-box: #444;
+    --color-text: #fff;
+    --color-text-muted: #ddd;
+    --color-text-dim: #ccc;
+
+    /* Akzentfarben (Neon-Theme) */
+    --color-accent-pink: #ff4fc3;
+    --color-accent-pink-light: #ff5fa2;
+    --color-accent-purple: #7d5cff;
+    --color-accent-yellow: #ffe14f;
+
+    /* Box-Verläufe */
+    --color-left-start: #5fb6ec;
+    --color-left-end: #7d5cff;
+    --color-right-start: #ff5fa2;
+    --color-right-end: #e8538a;
+    --color-middle-default: #fdfdfd;
+
+    /* Button-Hover */
+    --color-button-hover-start: #ff7fb6;
+    --color-button-hover-end: #9b7fe0;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Grundstil */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+h1 {
+    margin: 10px 0 16px 0;
+    text-align: center;
+    font-size: clamp(20px, 6vw, 32px);
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--color-accent-pink);
+    text-shadow: 0 0 6px var(--color-accent-pink), 0 0 14px var(--color-accent-pink);
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* Container für Boxen */
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Standardlayout */
+    gap: 12px;
+    margin: 20px;
+    width: 90%;
+    max-width: 1200px;
+}
+
+/* Font für GO! und STOP im Kreis */
+#go-circle {
+    display: none; /* Wird nur sichtbar, wenn aktiv */
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: green;
+    color: white;
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: "Condiment", sans-serif; /* Font für GO! und STOP */
+    line-height: 300px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    position: relative;
+    animation: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* Box-Stile */
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    background-color: var(--color-box);
+    color: var(--color-text);
+    border-radius: 12px;
+    height: 150px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    padding: 8px;
+}
+
+/* Spezifische Boxen */
+#left {
+    background: linear-gradient(135deg, var(--color-left-start), var(--color-left-end));
+    color: var(--color-text);
+    font-size: 2.2rem;
+}
+#middle {
+    background-color: var(--color-middle-default);
+    color: #000;
+}
+#right {
+    background: linear-gradient(135deg, var(--color-right-start), var(--color-right-end));
+    color: var(--color-text);
+}
+#language-box {
+    display: flex; /* Aktiviert Flexbox */
+    flex-direction: row; /* Ordnet die Inhalte horizontal an */
+    align-items: center; /* Zentriert die Inhalte vertikal */
+    gap: 20px; /* Abstand zwischen den Sprachoptionen */
+    justify-content: flex-start; /* Links bündig ausrichten */
+    margin-bottom: 1px; /* Abstand nach unten – halbiert (war vorher 20px) */
+    width: 100%; /* Box nimmt die gesamte Breite ein */
+    position: relative; /* Beibehalten, um die Position korrekt zu halten */
+    grid-column: 1 / -1; /* Dehnt die Box über alle Spalten im Grid aus */
+}
+
+#language-box label {
+    display: flex; /* Stellt sicher, dass Label und Radio-Button zusammenbleiben */
+    align-items: center; /* Zentriert die Elemente innerhalb des Labels */
+}
+
+/* Buttons */
+button {
+    margin: 10px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--color-accent-pink-light), var(--color-accent-purple));
+    border: none;
+    color: var(--color-text);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+button:hover {
+    background: linear-gradient(135deg, var(--color-button-hover-start), var(--color-button-hover-end));
+}
+
+/* Konfigurationsdialog */
+#mode-dialog label,
+#mode-dialog input,
+#mode-dialog p {
+    font-family: "Caveat", cursive;
+    font-size: 1.2rem;
+}
+
+#mode-dialog {
+    display: none;
+    border: 2px solid var(--color-accent-purple);
+    padding: 15px;
+    margin-top: 20px;
+    background-color: var(--color-bg-panel);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    font-family: "Caveat", cursive; /* Font für die Konfigurationsbox */
+    font-size: 1.2rem; /* Etwas größere Schrift für Lesbarkeit */
+    color: var(--color-text-muted);
+}
+
+#mode-dialog h4,
+#mode-dialog h5 {
+    color: var(--color-accent-yellow);
+    text-shadow: 0 0 6px var(--color-accent-pink);
+}
+
+.mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.mode-grid div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Hinweisbox */
+#hint-box {
+    display: none;
+    margin: 20px;
+    border: 2px solid var(--color-accent-purple);
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    background-color: var(--color-bg-panel);
+    color: var(--color-text-muted);
+    border-radius: 12px;
+}
+
+/* Cookie-Hinweis */
+#cookie-notice {
+    background-color: var(--color-bg-panel);
+    border: 1px solid var(--color-box);
+    color: var(--color-text-dim);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    text-align: center;
+    width: 90%;
+    max-width: 1200px;
+}
+
+/* Host-Modus: Umschalt-Button */
+#btn-toggle-view {
+    margin: 10px;
+}
+
+/* Würfel-Ansicht */
+#dice-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Bingo-Ansicht */
+#bingo-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#bingo-view h1 {
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+}
+
+#card {
+    background: var(--color-bg-panel);
+    border-radius: 18px;
+    padding: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    width: min(92vw, 420px);
+    aspect-ratio: 1 / 1.2;
+    display: flex;
+    flex-direction: column;
+}
+
+#grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 4px;
+}
+
+.cell {
+    position: relative;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.cell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%);
+}
+
+.cell .mark {
+    font-size: clamp(28px, 9vw, 48px);
+    font-weight: 900;
+    color: rgba(0,0,0,0.75);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.12s, transform 0.12s;
+    z-index: 2;
+    font-family: Arial, sans-serif;
+}
+
+.cell.marked .mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.color-green  { background-color: #6fc36b; }
+.color-yellow { background-color: #f3d23e; }
+.color-red    { background-color: #e8538a; }
+.color-purple { background-color: #9b7fe0; }
+.color-blue   { background-color: #5fb6ec; }
+
+#logo {
+    margin-top: 10px;
+    text-align: center;
+    font-size: clamp(20px, 6vw, 32px);
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--color-accent-pink);
+    text-shadow: 0 0 6px var(--color-accent-pink), 0 0 14px var(--color-accent-pink);
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+#bingoOverlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    z-index: 50;
+    cursor: pointer;
+}
+
+#bingoOverlay.show {
+    display: flex;
+}
+
+#bingoText {
+    font-size: clamp(48px, 18vw, 110px);
+    font-weight: 900;
+    letter-spacing: 6px;
+    color: var(--color-accent-yellow);
+    text-shadow: 0 0 10px var(--color-accent-pink), 0 0 30px var(--color-accent-pink), 0 0 50px var(--color-accent-purple);
+    transform: rotate(-8deg);
+    animation: pop 0.4s ease-out;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    70% { transform: scale(1.15) rotate(-8deg); opacity: 1; }
+    100% { transform: scale(1) rotate(-8deg); opacity: 1; }
+}
+
+#confirmOverlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+}
+
+#confirmOverlay.show {
+    display: flex;
+}
+
+#confirmModal {
+    background: var(--color-bg-panel);
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: min(85vw, 340px);
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    border: 2px solid var(--color-accent-purple);
+}
+
+#confirmModal h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.6rem;
+    color: var(--color-accent-yellow);
+    text-shadow: 0 0 8px var(--color-accent-pink);
+    letter-spacing: 3px;
+}
+
+#confirmModal p {
+    margin: 0 0 22px 0;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+}
+
+#confirmButtons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+#confirmButtons button {
+    flex: 1;
+    margin: 0;
+}
+
+#confirmNo {
+    background: var(--color-box);
+}
+
+/* Für Mobilgeräte */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .box {
+        height: 100px;
+        font-size: 1.2rem;
+    }
+
+    #left {
+        font-size: 1.6rem;
+    }
+
+    h1 {
+        letter-spacing: 2px;
+    }
+
+    button {
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    #language-box {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    #mode-dialog {
+        width: 100%;
+    }
+
+    .mode-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #go-circle {
+        width: min(300px, 80vw);
+        height: min(300px, 80vw);
+        line-height: min(300px, 80vw);
+    }
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Hitster Bingo Tools</title>
+<style>
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #2b2b2b;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    color: #fff;
+  }
+
+  h1 {
+    margin: 0 0 8px 0;
+    font-size: clamp(20px, 6vw, 32px);
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #ff4fc3;
+    text-shadow: 0 0 6px #ff4fc3, 0 0 14px #ff4fc3;
+    font-family: 'Trebuchet MS', sans-serif;
+    text-align: center;
+  }
+
+  .subtitle {
+    margin: 0 0 40px 0;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #ccc;
+    text-align: center;
+  }
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: min(92vw, 360px);
+  }
+
+  .menu a.tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 26px 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ff5fa2, #7d5cff);
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    transition: transform 0.1s;
+    text-align: center;
+  }
+
+  .menu a.tool-btn:active {
+    transform: scale(0.97);
+  }
+
+  .menu a.tool-btn .icon {
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+
+  .menu a.tool-btn small {
+    font-size: 0.85rem;
+    font-weight: normal;
+    letter-spacing: 1px;
+    opacity: 0.85;
+  }
+
+  #card-btn {
+    background: linear-gradient(135deg, #6fc36b, #5fb6ec);
+  }
+
+  #dice-btn {
+    background: linear-gradient(135deg, #f3d23e, #e8538a);
+  }
+
+  #card-btn small, #dice-btn small {
+    color: rgba(255,255,255,0.9);
+  }
+</style>
+</head>
+<body>
+
+<h1>HITSTER BINGO TOOLS</h1>
+<p class="subtitle">Wähle dein Werkzeug</p>
+
+<div class="menu">
+  <a id="card-btn" class="tool-btn" href="./histercard/index.html">
+    <span class="icon">🎴</span>
+    BingoCard öffnen
+    <small>Bingokarte spielen &amp; abhaken</small>
+  </a>
+
+  <a id="dice-btn" class="tool-btn" href="./songdice2/index.php">
+    <span class="icon">🎲</span>
+    Bingo starten
+    <small>Würfel für die Runde</small>
+  </a>
+</div>
+
+</body>
+</html>
+
