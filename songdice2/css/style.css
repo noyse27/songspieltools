@@ -117,21 +117,10 @@ h1 {
     background: linear-gradient(135deg, var(--color-right-start), var(--color-right-end));
     color: var(--color-text);
 }
-#language-box {
-    display: flex; /* Aktiviert Flexbox */
-    flex-direction: row; /* Ordnet die Inhalte horizontal an */
-    align-items: center; /* Zentriert die Inhalte vertikal */
-    gap: 20px; /* Abstand zwischen den Sprachoptionen */
-    justify-content: flex-start; /* Links bündig ausrichten */
-    margin-bottom: 1px; /* Abstand nach unten – halbiert (war vorher 20px) */
-    width: 100%; /* Box nimmt die gesamte Breite ein */
-    position: relative; /* Beibehalten, um die Position korrekt zu halten */
-    grid-column: 1 / -1; /* Dehnt die Box über alle Spalten im Grid aus */
-}
-
 #language-box label {
     display: flex; /* Stellt sicher, dass Label und Radio-Button zusammenbleiben */
     align-items: center; /* Zentriert die Elemente innerhalb des Labels */
+    gap: 6px;
 }
 
 /* Buttons */
@@ -157,45 +146,148 @@ button:hover {
     background: linear-gradient(135deg, var(--color-button-hover-start), var(--color-button-hover-end));
 }
 
-/* Konfigurationsdialog */
-#mode-dialog label,
-#mode-dialog input,
-#mode-dialog p {
+/* Konfigurationsmodal */
+#config-modal label,
+#config-modal input,
+#config-modal p {
     font-family: "Caveat", cursive;
     font-size: 1.2rem;
 }
 
-#mode-dialog {
+#config-modal-overlay {
+    position: fixed;
+    inset: 0;
     display: none;
-    border: 2px solid var(--color-accent-purple);
-    padding: 15px;
-    margin-top: 20px;
-    background-color: var(--color-bg-panel);
-    border-radius: 16px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-    font-family: "Caveat", cursive; /* Font für die Konfigurationsbox */
-    font-size: 1.2rem; /* Etwas größere Schrift für Lesbarkeit */
-    color: var(--color-text-muted);
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 150;
 }
 
-#mode-dialog h4,
-#mode-dialog h5 {
+#config-modal-overlay.show {
+    display: flex;
+}
+
+#config-modal {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--color-accent-purple);
+    background-color: var(--color-bg-panel);
+    border-radius: 16px;
+    width: min(92vw, 600px);
+    max-height: 85vh;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    font-family: "Caveat", cursive;
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    overflow: hidden;
+}
+
+#config-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 15px 0 15px;
+}
+
+#config-modal-header h4 {
+    margin: 0;
     color: var(--color-accent-yellow);
     text-shadow: 0 0 6px var(--color-accent-pink);
 }
 
-.mode-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+#config-modal-close {
+    margin: 0;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    line-height: 1;
+    font-size: 1.6rem;
+    background: transparent;
+    box-shadow: none;
+    color: var(--color-text-muted);
+}
+
+#config-modal-close:hover {
+    background: transparent;
+    color: var(--color-text);
+}
+
+#config-modal-body {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    overflow: hidden;
+    flex: 1;
+}
+
+#config-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+#config-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 130px;
+    flex-shrink: 0;
+}
+
+.config-tab {
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 1rem;
+    text-align: left;
+    background: transparent;
+    box-shadow: none;
+    color: var(--color-text-muted);
+}
+
+.config-tab:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.config-tab.active {
+    background: linear-gradient(135deg, var(--color-accent-pink-light), var(--color-accent-purple));
+    color: var(--color-text);
+}
+
+#config-panels {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    max-height: 50vh;
+}
+
+.config-panel {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.config-panel.active {
+    display: flex;
+}
+
+#config-panels .config-panel.active[data-panel="language"] {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
-.mode-grid div {
+#config-modal-footer {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    justify-content: flex-end;
+    padding: 10px 15px 15px 15px;
+}
+
+#config-modal-footer button {
+    margin: 0;
 }
 
 /* Hinweisbox */
@@ -458,12 +550,28 @@ footer a:hover {
         gap: 10px;
     }
 
-    #mode-dialog {
-        width: 100%;
+    #config-modal {
+        width: 95%;
+        max-height: 90vh;
     }
 
-    .mode-grid {
-        grid-template-columns: 1fr;
+    #config-modal-body {
+        flex-direction: column;
+    }
+
+    #config-tabs {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-width: 0;
+    }
+
+    .config-tab {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    #config-panels {
+        max-height: 40vh;
     }
 
     #go-circle {

@@ -64,4 +64,4 @@ Die BingoCard (`histercard/index.html`) funktioniert auch ohne Server direkt im 
 &copy; 2016 PolzeSoft · [polze.net](https://polze.net)  
 Kontakt: [songspieltools@polze.net](mailto:songspieltools@polze.net)
 
-> *Hitster ist ein eingetragenes Markenzeichen seiner jeweiligen Inhaber. Dieses Projekt steht in keiner offiziellen Verbindung zum Spielehersteller.*
+> *Hitster ist eine eingetragene Marke von Jumbo B.V. Dieses Projekt ist ein inoffizielles Fan-Projekt und steht in keiner Verbindung zu Jumbo B.V.*

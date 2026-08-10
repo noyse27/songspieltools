@@ -1,0 +1,23 @@
+[
+    { "id": "hitster_bingo", "de": "Hitster Bingo", "en": "Hitster Bingo" },
+    { "id": "original", "de": "Original Ausgabe", "en": "Original Version" },
+    { "id": "summer_hits", "de": "Summer Hits", "en": "Summer Hits" },
+    { "id": "guilty_pleasures", "de": "Guilty Pleasures", "en": "Guilty Pleasures" },
+    { "id": "schlager", "de": "Schlager", "en": "Schlager" },
+    { "id": "bayern1", "de": "Bayern 1 Edition", "en": "Bavaria 1 Edition" },
+    { "id": "soundtrack", "de": "Soundtrack", "en": "Soundtrack" },
+    { "id": "rock", "de": "Rock", "en": "Rock" },
+    { "id": "battle_of_generations", "de": "Battle of the Generations", "en": "Battle of the Generations" },
+    { "id": "celebration", "de": "Celebration", "en": "Celebration" },
+    { "id": "platinum", "de": "Platinum Edition", "en": "Platinum Edition" },
+    { "id": "urban_hiphop", "de": "Urban & Hip-Hop", "en": "Urban & Hip-Hop" },
+    { "id": "christmas", "de": "Christmas", "en": "Christmas" },
+    { "id": "all_american", "de": "All American", "en": "All American" },
+    { "id": "nl100", "de": "100% NL", "en": "100% NL" },
+    { "id": "solo_musica_italiana", "de": "Solo Musica Italiana", "en": "Solo Musica Italiana" },
+    { "id": "espanol100", "de": "100% en español", "en": "100% en español" },
+    { "id": "chansons_francaises100", "de": "100% Chansons Françaises", "en": "100% Chansons Françaises" },
+    { "id": "radio_contact", "de": "Radio Contact", "en": "Radio Contact" },
+    { "id": "latino", "de": "Latino", "en": "Latino" },
+    { "id": "disco_polo_party", "de": "Disco Polo Party", "en": "Disco Polo Party" }
+]

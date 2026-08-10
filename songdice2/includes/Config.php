@@ -41,7 +41,12 @@ class Config {
             || self::$config['version'] !== self::CONFIG_VERSION
         ) {
             self::resetToDefaults();
+            return;
         }
+
+        // Neu hinzugekommene Kategorien/Editionen (z.B. in editions.json ergänzt)
+        // in bestehende Cookies nachladen, ohne den Rest der Konfiguration anzutasten
+        self::mergeNewOptions();
     }
 
     /**
@@ -54,9 +59,39 @@ class Config {
             'language' => 'de',
             'show_colors' => true,
             'categories' => array_fill_keys(array_keys(Language::get('categories')), true),
-            'editions' => array_fill_keys(array_keys(Language::get('editions')), true)
+            'editions' => array_fill_keys(array_keys(Language::getEditions()), true)
         ];
         self::saveConfig();
+    }
+
+    /**
+     * Ergänzt Kategorien/Editionen, die dem gespeicherten Cookie noch unbekannt
+     * sind (z.B. nachträglich in editions.json hinzugefügte Editionen), aktiv
+     * in die bestehende Konfiguration - ohne Sprache, Farbfeld oder die
+     * bisherige Auswahl des Nutzers zu verändern.
+     */
+    private static function mergeNewOptions() {
+        $known = [
+            'categories' => Language::get('categories'),
+            'editions' => Language::getEditions()
+        ];
+        $changed = false;
+
+        foreach ($known as $section => $items) {
+            if (!isset(self::$config[$section]) || !is_array(self::$config[$section])) {
+                self::$config[$section] = [];
+            }
+            foreach (array_keys($items) as $id) {
+                if (!array_key_exists($id, self::$config[$section])) {
+                    self::$config[$section][$id] = true;
+                    $changed = true;
+                }
+            }
+        }
+
+        if ($changed) {
+            self::saveConfig();
+        }
     }
 
     /**

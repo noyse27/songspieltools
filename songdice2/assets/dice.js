@@ -52,11 +52,43 @@ document.querySelectorAll('#config-form input[name="language"]').forEach(functio
     }
 })();
 
-// Konfigurationsdialog ein- und ausblenden
-document.getElementById("btn-mode").addEventListener("click", function() {
-    const modeDialog = document.getElementById("mode-dialog");
-    modeDialog.style.display = modeDialog.style.display === "block" ? "none" : "block";
-});
+// Konfigurationsmodal: öffnen, schließen (X / Hintergrund) und Tabs umschalten
+(function() {
+    const overlay = document.getElementById("config-modal-overlay");
+    const openBtn = document.getElementById("btn-mode");
+    const closeBtn = document.getElementById("config-modal-close");
+    const configForm = document.getElementById("config-form");
+    const tabs = document.querySelectorAll(".config-tab");
+    const panels = document.querySelectorAll(".config-panel");
+
+    function openModal() {
+        overlay.classList.add("show");
+    }
+
+    function closeModal() {
+        overlay.classList.remove("show");
+        configForm.reset(); // Verwirft nicht gespeicherte Änderungen
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+
+    // Klick auf den abgedunkelten Hintergrund (nicht auf das Modal selbst) schließt ebenfalls
+    overlay.addEventListener("click", function(event) {
+        if (event.target === overlay) {
+            closeModal();
+        }
+    });
+
+    tabs.forEach(function(tab) {
+        tab.addEventListener("click", function() {
+            tabs.forEach(t => t.classList.remove("active"));
+            panels.forEach(p => p.classList.remove("active"));
+            tab.classList.add("active");
+            document.querySelector('.config-panel[data-panel="' + tab.dataset.tab + '"]').classList.add("active");
+        });
+    });
+})();
 
 // Wake Lock Funktionalität
 const wakeLockCheckbox = document.getElementById("wakeLockCheckbox");

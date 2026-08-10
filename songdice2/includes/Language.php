@@ -8,6 +8,11 @@
  */
 class Language {
     /**
+     * Zwischenspeicher für die aus editions.json geladenen Editionsdaten
+     */
+    private static $editionsData = null;
+
+    /**
      * Übersetzungsdaten für Deutsch
      */
     private static $translations_de = [
@@ -21,15 +26,6 @@ class Language {
             'pm4' => "4 vor / 4 nach",
             'pm2' => "2 vor / 2 nach",
             'before2000' => "vor 2000?"
-        ],
-        'editions' => [
-            'hitster_bingo' => "Hitster Bingo",
-            'original' => "Original Ausgabe",
-            'summer_hits' => "Summer Hits",
-            'guilty_pleasures' => "Guilty Pleasures",
-            'schlager' => "Schlager",
-            'bayern1' => "Bayern 1 Edition",
-            'soundtrack' => "Soundtrack"
         ],
         'colors' => [
             'yellow' => "Gelb",
@@ -53,11 +49,13 @@ class Language {
             'startButton' => "Start",
             'configButton' => "Konfiguration öffnen",
             'h4Conf' => "Konfiguration",
-            'h5Lang' => "Sprache",
-            'h5Colorpad' => "Farbfeld",
-            'h5Playmode' => "Spielmodus",
-            'h5Edition' => "Edition",
+            'tabPlaymode' => "Spielmodi",
+            'tabEditions' => "Editionen",
+            'tabMisc' => "Sonstiges",
+            'tabLanguage' => "Sprache",
             'lblColorpad' => "Farbfeld aktivieren",
+            'saveButton' => "Speichern",
+            'closeConfig' => "Konfiguration schließen",
             'h1Dicehead' => "Würfel für Hitster Bingo",
             'errorNoSelection' => "Bitte wähle mindestens einen Begriff und eine Edition aus!",
             'screenActive' => "Bildschirm aktiv halten",
@@ -70,7 +68,8 @@ class Language {
             'confirmYes' => "Ja",
             'confirmNo' => "Abbrechen",
             'toggleToBingo' => "🎯 Bingo-Karte",
-            'toggleToDice' => "🎲 Würfel"
+            'toggleToDice' => "🎲 Würfel",
+            'trademarkDisclaimer' => "Hitster ist eine eingetragene Marke von Jumbo B.V. Diese Seite ist ein inoffizielles Fan-Projekt und steht in keiner Verbindung zu Jumbo B.V."
         ]
     ];
 
@@ -88,15 +87,6 @@ class Language {
             'pm4' => "4 before / 4 after",
             'pm2' => "2 before / 2 after",
             'before2000' => "before 2000?"
-        ],
-        'editions' => [
-            'hitster_bingo' => "Hitster Bingo",
-            'original' => "Original Version",
-            'summer_hits' => "Summer Hits",
-            'guilty_pleasures' => "Guilty Pleasures",
-            'schlager' => "Schlager",
-            'bayern1' => "Bavaria 1 Edition",
-            'soundtrack' => "Soundtrack"
         ],
         'colors' => [
             'yellow' => "Yellow",
@@ -120,11 +110,13 @@ class Language {
             'startButton' => "Start",
             'configButton' => "Open Configuration",
             'h4Conf' => "Configuration",
-            'h5Lang' => "Language",
-            'h5Colorpad' => "Colorpad",
-            'h5Playmode' => "Playmode",
-            'h5Edition' => "Edition",
+            'tabPlaymode' => "Game Modes",
+            'tabEditions' => "Editions",
+            'tabMisc' => "Other",
+            'tabLanguage' => "Language",
             'lblColorpad' => "Enable Colorpad",
+            'saveButton' => "Save",
+            'closeConfig' => "Close configuration",
             'h1Dicehead' => "Dice for Hitster Bingo",
             'errorNoSelection' => "Please select at least one category and one edition!",
             'screenActive' => "Keep screen active",
@@ -137,7 +129,8 @@ class Language {
             'confirmYes' => "Yes",
             'confirmNo' => "Cancel",
             'toggleToBingo' => "🎯 Bingo Card",
-            'toggleToDice' => "🎲 Dice"
+            'toggleToDice' => "🎲 Dice",
+            'trademarkDisclaimer' => "Hitster is a registered trademark of Jumbo B.V. This is an unofficial fan project and is not affiliated with Jumbo B.V."
         ]
     ];
 
@@ -173,12 +166,39 @@ class Language {
     }
 
     /**
+     * Lädt die Editionsdaten aus editions.json (einmalig, dann zwischengespeichert).
+     * Editionen liegen dort ausgelagert, damit neue Editionen ergänzt werden können,
+     * ohne den PHP-Code anzufassen.
+     *
+     * @return array Liste von Editions-Datensätzen (je id, de, en)
+     */
+    private static function loadEditionsData() {
+        if (self::$editionsData === null) {
+            $path = __DIR__ . '/editions.json';
+            $json = file_exists($path) ? file_get_contents($path) : '[]';
+            $decoded = json_decode($json, true);
+            self::$editionsData = is_array($decoded) ? $decoded : [];
+        }
+        return self::$editionsData;
+    }
+
+    /**
      * Gibt alle Editionen für die aktuelle Sprache zurück
      *
      * @return array Assoziatives Array ID => Anzeigename
      */
     public static function getEditions() {
-        return self::get('editions');
+        $lang = Config::getLanguage();
+        $editions = [];
+
+        foreach (self::loadEditionsData() as $edition) {
+            if (!isset($edition['id'])) {
+                continue;
+            }
+            $editions[$edition['id']] = $edition[$lang] ?? ($edition['de'] ?? $edition['id']);
+        }
+
+        return $editions;
     }
 
     /**

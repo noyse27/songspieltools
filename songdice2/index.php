@@ -72,60 +72,67 @@ $animationData = [
 
 <button id="btn-mode"><?php echo Language::getUI("configButton"); ?></button>
 
-<!-- Konfigurationsdialog -->
-<div id="mode-dialog">
-  <h4 id="h4-conf"><?php echo Language::getUI("h4Conf"); ?></h4>
-  <form method="post" id="config-form">
-    <div class="mode-grid">
-      <!-- Spracheinstellung -->
-      <div id="language-box">
-        <h5 id="h5-lang"><?php echo Language::getUI("h5Lang"); ?></h5>
-        <label>
-          <input type="radio" name="language" value="de" <?php echo $language === "de" ? "checked" : ""; ?>> Deutsch
-        </label>
-        <label>
-          <input type="radio" name="language" value="en" <?php echo $language === "en" ? "checked" : ""; ?>> English
-        </label>
-      </div>
-
-      <!-- Spielmodi -->
-      <div id="category-box">
-        <h5 id="h5-playmode"><?php echo Language::getUI("h5Playmode"); ?></h5>
-        <div id="categories">
-          <?php foreach ($allCategories as $categoryId => $isActive): ?>
-            <label>
-              <input type="checkbox" name="categories[]" value="<?php echo htmlspecialchars($categoryId); ?>" <?php echo $isActive ? "checked" : ""; ?>>
-              <?php echo htmlspecialchars($categoryLabels[$categoryId] ?? $categoryId); ?>
-            </label>
-          <?php endforeach; ?>
-        </div>
-      </div>
-
-      <!-- Farben aktivieren/deaktivieren -->
-      <div id="color-box">
-        <h5 id="h5-colorpad"><?php echo Language::getUI("h5Colorpad"); ?></h5>
-        <label id="colorpad">
-          <input type="checkbox" id="toggle-colors" name="toggle_colors" <?php echo $showColors ? "checked" : ""; ?>>
-          <?php echo Language::getUI("lblColorpad"); ?>
-        </label>
-      </div>
-
-      <!-- Editionen -->
-      <div id="editions-box">
-        <h5 id="h5-edition"><?php echo Language::getUI("h5Edition"); ?></h5>
-        <div id="editions">
-          <?php foreach ($allEditions as $editionId => $isActive): ?>
-            <label>
-              <input type="checkbox" name="editions[]" value="<?php echo htmlspecialchars($editionId); ?>" <?php echo $isActive ? "checked" : ""; ?>>
-              <?php echo htmlspecialchars($editionLabels[$editionId] ?? $editionId); ?>
-            </label>
-          <?php endforeach; ?>
-        </div>
-      </div>
+<!-- Konfigurationsmodal -->
+<div id="config-modal-overlay">
+  <div id="config-modal">
+    <div id="config-modal-header">
+      <h4 id="h4-conf"><?php echo Language::getUI("h4Conf"); ?></h4>
+      <button type="button" id="config-modal-close" aria-label="<?php echo htmlspecialchars(Language::getUI("closeConfig")); ?>">&times;</button>
     </div>
-    <input type="hidden" name="update_config" value="1">
-    <button type="submit"><?php echo Language::getUI("configButton"); ?></button>
-  </form>
+    <div id="config-modal-body">
+      <div id="config-tabs" role="tablist">
+        <button type="button" class="config-tab active" data-tab="playmode"><?php echo Language::getUI("tabPlaymode"); ?></button>
+        <button type="button" class="config-tab" data-tab="editions"><?php echo Language::getUI("tabEditions"); ?></button>
+        <button type="button" class="config-tab" data-tab="misc"><?php echo Language::getUI("tabMisc"); ?></button>
+        <button type="button" class="config-tab" data-tab="language"><?php echo Language::getUI("tabLanguage"); ?></button>
+      </div>
+      <form method="post" id="config-form">
+        <div id="config-panels">
+          <!-- Spielmodi -->
+          <div class="config-panel active" data-panel="playmode" id="category-box">
+            <?php foreach ($allCategories as $categoryId => $isActive): ?>
+              <label>
+                <input type="checkbox" name="categories[]" value="<?php echo htmlspecialchars($categoryId); ?>" <?php echo $isActive ? "checked" : ""; ?>>
+                <?php echo htmlspecialchars($categoryLabels[$categoryId] ?? $categoryId); ?>
+              </label>
+            <?php endforeach; ?>
+          </div>
+
+          <!-- Editionen -->
+          <div class="config-panel" data-panel="editions" id="editions-box">
+            <?php foreach ($allEditions as $editionId => $isActive): ?>
+              <label>
+                <input type="checkbox" name="editions[]" value="<?php echo htmlspecialchars($editionId); ?>" <?php echo $isActive ? "checked" : ""; ?>>
+                <?php echo htmlspecialchars($editionLabels[$editionId] ?? $editionId); ?>
+              </label>
+            <?php endforeach; ?>
+          </div>
+
+          <!-- Sonstiges -->
+          <div class="config-panel" data-panel="misc" id="misc-box">
+            <label id="colorpad">
+              <input type="checkbox" id="toggle-colors" name="toggle_colors" <?php echo $showColors ? "checked" : ""; ?>>
+              <?php echo Language::getUI("lblColorpad"); ?>
+            </label>
+          </div>
+
+          <!-- Sprache -->
+          <div class="config-panel" data-panel="language" id="language-box">
+            <label>
+              <input type="radio" name="language" value="de" <?php echo $language === "de" ? "checked" : ""; ?>> Deutsch
+            </label>
+            <label>
+              <input type="radio" name="language" value="en" <?php echo $language === "en" ? "checked" : ""; ?>> English
+            </label>
+          </div>
+        </div>
+        <input type="hidden" name="update_config" value="1">
+        <div id="config-modal-footer">
+          <button type="submit"><?php echo Language::getUI("saveButton"); ?></button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Boxen -->
@@ -182,7 +189,8 @@ $animationData = [
 
 <footer>
   &copy; 2016 <a href="https://polze.net" target="_blank">PolzeSoft</a> &nbsp;|&nbsp;
-  Kontakt: <a href="mailto:songspieltools@polze.net">songspieltools@polze.net</a>
+  Kontakt: <a href="mailto:songspieltools@polze.net">songspieltools@polze.net</a><br>
+  <?php echo Language::getUI("trademarkDisclaimer"); ?>
 </footer>
 </body>
 </html>
